@@ -1,3 +1,4 @@
+
 name: Deploy to GitHub Pages
 
 on:
@@ -20,11 +21,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          # 暫時移除 cache: 'npm'，因為初次提交可能還沒有 package-lock.json
-          # 等之後有 package-lock.json 上傳後再加回來也可以
+
+      - name: Clean Install
+        # 強制移除舊的 lock file 與 node_modules，確保重新解析依賴
+        run: |
+          rm -rf package-lock.json
+          rm -rf node_modules
 
       - name: Install dependencies
-        # 使用 npm install 會自動產生 lock file (若不存在)
         run: npm install
 
       - name: Build
