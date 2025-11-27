@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # 或者是 master，看您的主分支名稱
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -23,13 +23,12 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        # 修改：使用 npm install 取代 npm ci，因為儲存庫中可能尚未提交 package-lock.json
+        run: npm install
 
       - name: Build
         run: npm run build
         env:
-          # 將 GitHub Secrets 注入到 Build 環境中
-          # 這裡的名稱必須對應 vite.config.ts 中的定義
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           VITE_FINNHUB_API_KEY: ${{ secrets.VITE_FINNHUB_API_KEY }}
           VITE_FIREBASE_CONFIG_STRING: ${{ secrets.VITE_FIREBASE_CONFIG_STRING }}
